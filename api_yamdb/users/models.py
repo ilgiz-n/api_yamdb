@@ -4,7 +4,6 @@ from django.db import models
 from django.conf import settings
 
 
-
 class User(AbstractUser):
     status = ArrayField(
         models.IntegerField(choices=settings.USER_LEVEL_CHOICES, blank=True),
