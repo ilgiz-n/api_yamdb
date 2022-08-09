@@ -5,9 +5,4 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-    status = ArrayField(
-        models.IntegerField(choices=settings.USER_LEVEL_CHOICES, blank=True),
-    )
-
-    def __str__(self):
-        return self.title
+    status = models.IntegerField(choices=settings.USER_LEVEL_CHOICES, blank=True, default = 3)
