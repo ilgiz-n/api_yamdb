@@ -16,7 +16,10 @@ class Reviews(models.Model):
         related_name='reviews'
     )
     text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(
+        blank=True, null=True,
+    )
+    pub_date = models.DateTimeField(auto_now_add=True)
 
 
 class Comments(models.Model):
@@ -31,4 +34,4 @@ class Comments(models.Model):
         related_name='comments'
     )
     text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField(auto_now_add=True)
