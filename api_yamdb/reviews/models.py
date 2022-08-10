@@ -12,6 +12,7 @@ class Categories(models.Model):
     class Meta:
         ordering = ('-name',)
         verbose_name = 'Категория произведения'
+        verbose_name_plural = 'Категории произведений'
 
     def __str__(self):
         return self.name
@@ -28,6 +29,7 @@ class Genres(models.Model):
     class Meta:
         ordering = ('-name',)
         verbose_name = 'Жанр произведения'
+        verbose_name_plural = 'Жанры произведений'
 
     def __str__(self):
         return self.name
@@ -44,7 +46,7 @@ class Titles(models.Model):
     category = models.ForeignKey(
         Categories,
         on_delete=models.SET_NULL,
-#        related_name='сategories',
+#       related_name='сategories',
         blank=True, null=True,
         verbose_name='Категория',
         help_text='Выберите категорию произведения'
@@ -60,13 +62,14 @@ class Titles(models.Model):
     genre = models.ManyToManyField(
         Genres,
         blank=True,
-#        related_name='genres',
+#       related_name='genres',
         verbose_name='Жанр'
     )
 
     class Meta:
         ordering = ('name',)
         verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
 
     def __str__(self):
         return self.name
