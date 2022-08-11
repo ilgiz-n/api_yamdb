@@ -28,5 +28,4 @@ class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.all()
     serializer_class = TitlesSerializer
     permission_classes = (AdminModeratorAuthorPermission,)
-#    filterset_class = (filters.TitleFilter,)
     filter_backends = (filters.DjangoFilterBackend,)
