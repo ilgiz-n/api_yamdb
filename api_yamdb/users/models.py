@@ -3,13 +3,13 @@ from django.db import models
 from django.conf import settings
 
 
-DEFAULT_USER_LEVEL = 3
 
 class User(AbstractUser):
-    role = models.IntegerField(
+    role = models.CharField(
+        max_length = 20,
         choices=settings.USER_LEVEL_CHOICES, 
         blank=True, 
-        default = DEFAULT_USER_LEVEL,
+        default = settings.DEFAULT_USER_LEVEL,
         verbose_name="Роль",
     )
     bio = models.TextField(
@@ -21,10 +21,23 @@ class User(AbstractUser):
         blank=True,
         verbose_name="Код верификации",
     )
+    email = models.EmailField(max_length=254, unique=True)
+    username = models.CharField(max_length=150, unique=True)
 
     def __str__(self):
-        return self.username 
+        return self.username
 
+    @property
+    def is_admin(self):
+        return self.role == "admin" or self.is_superuser
+
+    @property
+    def is_moderator(self):
+        return self.role == "moderator"
+
+    @property
+    def is_user(self):
+        return self.role == "user"
 
     class Meta:
         verbose_name = 'Пользователь'

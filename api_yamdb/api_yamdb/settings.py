@@ -114,12 +114,20 @@ AUTH_USER_MODEL = 'users.User'
 
 # Constant choises for User model
 
+# USER_LEVEL_CHOICES = (
+#         (0, "Superuser"),
+#         (0, "admin"),
+#         (1, "moderator"),
+#         (2, "user"),
+#     )
+
 USER_LEVEL_CHOICES = (
-        (0, "Superuser"),
-        (1, "Admin"),
-        (2, "Moderator"),
-        (3, "User"),
+        ('admin', 'admin'),
+        ('moderator', 'moderator'),
+        ('user', 'user'),
     )
+
+DEFAULT_USER_LEVEL = 'user'
 
 #  Email emulation 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -128,7 +136,8 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 # REST FRAMEWORK
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
+#        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
+        'rest_framework.permissions.AllowAny',         
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
