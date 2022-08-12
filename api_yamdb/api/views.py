@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets
 from reviews.models import Reviews, Comments, Titles, Categories, Genres, Titles
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import (CategoriesSerializer, GenresSerializer,
                           ReviewsSerializer, CommentsSerializer,
@@ -31,7 +32,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.all()
     serializer_class = TitlesSerializer
     permission_classes = (AdminModeratorAuthorPermission,)
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend,)
 
     
 class ReviewsViewSet(viewsets.ModelViewSet):

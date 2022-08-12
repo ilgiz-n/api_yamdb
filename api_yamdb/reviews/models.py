@@ -5,19 +5,6 @@ from django.db import models
 from users.models import User
 
 
-class Comments(models.Model):
-    review = models.ForeignKey(
-        Reviews,
-        on_delete=models.CASCADE,
-        related_name='comments'
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='comments'
-    )
-    text = models.TextField()
-    pub_date = models.DateTimeField(auto_now_add=True)
 
 
 class Categories(models.Model):
@@ -93,6 +80,7 @@ class Titles(models.Model):
     def __str__(self):
         return self.name
  
+
 class Reviews(models.Model):
     title = models.ForeignKey(
         Titles,
@@ -108,4 +96,19 @@ class Reviews(models.Model):
     score = models.IntegerField(
         blank=True, null=True,
     )
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+
+class Comments(models.Model):
+    review = models.ForeignKey(
+        Reviews,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    text = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
