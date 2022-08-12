@@ -27,7 +27,6 @@ class TitlesAdmin(admin.ModelAdmin):
         'rating',
         'description',
         'category',
-        'genre',
     )
     list_editable = (
         'description',
@@ -40,5 +39,6 @@ class TitlesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Categories, CategoriesAdmin)
-admin.site.register(Genres, GenresAdmin)
-admin.site.register(Titles)
+admin.site.register(Genres, CategoriesAdmin)
+admin.site.register(Titles, TitlesAdmin)
+

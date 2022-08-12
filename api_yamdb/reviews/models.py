@@ -46,7 +46,7 @@ class Titles(models.Model):
     category = models.ForeignKey(
         Categories,
         on_delete=models.SET_NULL,
-#        related_name='сategories',
+#       related_name='сategories',
         blank=True, null=True,
         verbose_name='Категория',
         help_text='Выберите категорию произведения'
@@ -62,7 +62,7 @@ class Titles(models.Model):
     genre = models.ManyToManyField(
         Genres,
         blank=True,
-#        related_name='genres',
+#       related_name='genres',
         verbose_name='Жанр'
     )
 
