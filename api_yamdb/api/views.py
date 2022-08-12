@@ -1,10 +1,39 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets
-from reviews.models import Reviews, Comments, Titles
-from .serializers import ReviewsSerializer, CommentsSerializer
-from .permissions import AdminModeratorAuthorPermission
+from reviews.models import Reviews, Comments, Titles, Categories, Genres, Titles
+
+from .serializers import (CategoriesSerializer, GenresSerializer,
+                          ReviewsSerializer, CommentsSerializer,
+                          TitlesSerializer)
+from .permissions import (AdminModeratorAuthorPermission,
+                          AdminSuperuserPermission)
 
 
+class CategoriesViewSet(viewsets.ModelViewSet):
+    queryset = Categories.objects.all()
+    serializer_class = CategoriesSerializer
+    permission_classes = (AdminModeratorAuthorPermission,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class GenresViewSet(viewsets.ModelViewSet):
+    queryset = Genres.objects.all()
+    serializer_class = GenresSerializer
+    permission_classes = (AdminModeratorAuthorPermission,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class TitlesViewSet(viewsets.ModelViewSet):
+    queryset = Titles.objects.all()
+    serializer_class = TitlesSerializer
+    permission_classes = (AdminModeratorAuthorPermission,)
+    filter_backends = (filters.DjangoFilterBackend,)
+
+    
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
     permission_classes = [AdminModeratorAuthorPermission]
