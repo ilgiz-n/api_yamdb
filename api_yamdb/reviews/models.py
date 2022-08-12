@@ -7,7 +7,7 @@ User = get_user_model()
 class Reviews(models.Model):
     title = models.ForeignKey(
         Titles,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='reviews'
     )
     author = models.ForeignKey(
@@ -25,7 +25,7 @@ class Reviews(models.Model):
 class Comments(models.Model):
     review = models.ForeignKey(
         Reviews,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='comments'
     )
     author = models.ForeignKey(
