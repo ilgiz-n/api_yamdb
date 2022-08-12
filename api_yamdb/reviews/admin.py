@@ -5,6 +5,7 @@ from .models import Categories, Genres, Titles
 
 class CategoriesAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'slug',)
+    prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
     list_filter = ('name',)
     empty_value_display = '-пусто-'
@@ -12,6 +13,7 @@ class CategoriesAdmin(admin.ModelAdmin):
 
 class GenresAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'slug',)
+    prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
     list_filter = ('name',)
     empty_value_display = '-пусто-'
@@ -37,6 +39,6 @@ class TitlesAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-admin.site.register(Categories)
-admin.site.register(Genres)
+admin.site.register(Categories, CategoriesAdmin)
+admin.site.register(Genres, GenresAdmin)
 admin.site.register(Titles)
