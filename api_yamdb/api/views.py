@@ -7,13 +7,15 @@ from .serializers import (CategoriesSerializer, GenresSerializer,
                           ReviewsSerializer, CommentsSerializer,
                           TitlesSerializer)
 from .permissions import (AdminModeratorAuthorPermission,
-                          AdminSuperuserPermission)
+                          AdminSuperuserPermission,
+                          IsAdminUserOrReadOnly)
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
 
 class CategoriesViewSet(viewsets.ModelViewSet):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
-    permission_classes = (AdminModeratorAuthorPermission,)
+    permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -22,7 +24,7 @@ class CategoriesViewSet(viewsets.ModelViewSet):
 class GenresViewSet(viewsets.ModelViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
-    permission_classes = (AdminModeratorAuthorPermission,)
+    permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -31,7 +33,7 @@ class GenresViewSet(viewsets.ModelViewSet):
 class TitlesViewSet(viewsets.ModelViewSet):
     queryset = Titles.objects.all()
     serializer_class = TitlesSerializer
-    permission_classes = (AdminModeratorAuthorPermission,)
+    permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
 
     
