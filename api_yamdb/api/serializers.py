@@ -1,6 +1,6 @@
 import datetime as dt
 from rest_framework import serializers
-from reviews.models import Categories, Genres, Titles
+from reviews.models import Categories, Genres, Titles, Reviews, Comments
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
@@ -30,3 +30,23 @@ class TitlesSerializer(serializers.ModelSerializer):
         if value > current_year:
             raise serializers.ValidationError('Исправьте год')
         return value
+
+
+class ReviewsSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        read_only=True, slug_field='username'
+    )
+
+    class Meta:
+        fields = '__all__'
+        model = Reviews
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        read_only=True, slug_field='username'
+    )
+
+    class Meta:
+        fields = '__all__'
+        model = Comments
