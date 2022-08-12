@@ -5,7 +5,6 @@ from .permissions import (AdminModeratorAuthorPermission,
 from .serializers import (CategoriesSerializer, GenresSerializer,
                           TitlesSerializer)
 
-
 class CategoriesViewSet(viewsets.ModelViewSet):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
@@ -29,3 +28,4 @@ class TitlesViewSet(viewsets.ModelViewSet):
     serializer_class = TitlesSerializer
     permission_classes = (AdminModeratorAuthorPermission,)
     filter_backends = (filters.DjangoFilterBackend,)
+

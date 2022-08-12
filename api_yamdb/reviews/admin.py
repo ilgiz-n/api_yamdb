@@ -41,3 +41,4 @@ class TitlesAdmin(admin.ModelAdmin):
 admin.site.register(Categories, CategoriesAdmin)
 admin.site.register(Genres, CategoriesAdmin)
 admin.site.register(Titles, TitlesAdmin)
+
