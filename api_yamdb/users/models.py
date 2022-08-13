@@ -9,7 +9,7 @@ class User(AbstractUser):
         max_length = 50,
         choices=settings.USER_LEVEL_CHOICES, 
         blank=True, 
-        default = settings.DEFAULT_USER_LEVEL,
+        default = 'user',
         verbose_name="Роль",
     )
     bio = models.TextField(

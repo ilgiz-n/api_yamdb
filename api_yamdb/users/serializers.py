@@ -32,7 +32,6 @@ class SignUpSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(max_length = 50)
     class Meta:
         model = User
         fields = (

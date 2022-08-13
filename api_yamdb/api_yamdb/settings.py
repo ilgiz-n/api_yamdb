@@ -91,7 +91,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
@@ -108,18 +108,11 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
-# Chosen default User model 
+# Custom User model 
 
 AUTH_USER_MODEL = 'users.User' 
 
 # Constant choises for User model
-
-# USER_LEVEL_CHOICES = (
-#         (0, "Superuser"),
-#         (0, "admin"),
-#         (1, "moderator"),
-#         (2, "user"),
-#     )
 
 USER_LEVEL_CHOICES = (
         ('admin', 'admin'),
@@ -136,7 +129,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 # REST FRAMEWORK settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-#        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
         'rest_framework.permissions.AllowAny',         
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -146,12 +138,12 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 }
 
+# Token access settings
 
 SIMPLE_JWT = {
-    # Устанавливаем срок жизни токена
    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
    'AUTH_HEADER_TYPES': ('Bearer',),
 } 
 
-# CONFIRMATION_CODE
+# Confirmation code
 CONFIRMATION_CODE_LENGTH = 5
