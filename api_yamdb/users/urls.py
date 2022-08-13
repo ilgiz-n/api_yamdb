@@ -1,6 +1,6 @@
 from django.urls import path
 
-from users.views import AuthCreateUserView, TokenCreateView
+from api.views import AuthCreateUserView, TokenCreateView
 
 app_name = 'users'
 
