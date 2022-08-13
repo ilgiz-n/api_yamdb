@@ -8,7 +8,8 @@ from .serializers import (CategoriesSerializer, GenresSerializer,
                           TitlesSerializer)
 from .permissions import (AdminModeratorAuthorPermission,
                           AdminSuperuserPermission,
-                          IsAdminUserOrReadOnly)
+                          IsAdminUserOrReadOnly,
+                          AdminModeratorAuthorPermissionNew)
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 
 
