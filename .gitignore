@@ -150,6 +150,7 @@ media/
 
 # notes
 notes.txt
+*notes.txt
 
 # isort config
 .isort.cfg
