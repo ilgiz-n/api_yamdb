@@ -1,7 +1,6 @@
 from django.db import models
-
 from users.models import User
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Categories(models.Model):
     name = models.CharField(
@@ -76,6 +75,7 @@ class Titles(models.Model):
     def __str__(self):
         return self.name
 
+
 class Reviews(models.Model):
     title = models.ForeignKey(
         Titles,
@@ -89,9 +89,21 @@ class Reviews(models.Model):
     )
     text = models.TextField()
     score = models.IntegerField(
-        blank=True, null=True,
-    )
+        validators=[
+            MinValueValidator(1, 'Оценка должна быть не меньше 1.'),
+            MaxValueValidator(10, 'Оценка должна быть не больше 10.')
+        ],
+        verbose_name='Оценка произведения')
     pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['pub_date']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'],
+                name='unique_review'
+            ),
+        ]
 
 
 class Comments(models.Model):
