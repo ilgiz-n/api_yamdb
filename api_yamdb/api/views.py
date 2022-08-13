@@ -1,4 +1,9 @@
 from django.shortcuts import get_object_or_404
+<<<<<<< HEAD
+=======
+from rest_framework import filters, viewsets
+from reviews.models import Reviews, Comments, Titles, Categories, Genres, Titles, Rating
+>>>>>>> review
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
@@ -113,7 +118,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
 
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
-    permission_classes = [AdminModeratorAuthorPermission]
+    permission_classes = [AdminModeratorAuthorPermissionNew]
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -129,7 +134,7 @@ class ReviewsViewSet(viewsets.ModelViewSet):
 
 class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
-    permission_classes = [AdminModeratorAuthorPermission]
+    permission_classes = [AdminModeratorAuthorPermissionNew]
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
