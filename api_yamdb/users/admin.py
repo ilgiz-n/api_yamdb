@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from users.models import User
 
+
 class UserAdmin(UserAdmin):
     model = User
     list_display = (
@@ -16,4 +17,5 @@ class UserAdmin(UserAdmin):
     list_filter = ('username',)
     empty_value_display = '-пусто-'
 
-admin.site.register(User, UserAdmin) 
+
+admin.site.register(User, UserAdmin)

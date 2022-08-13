@@ -3,13 +3,12 @@ from django.db import models
 from django.conf import settings
 
 
-
 class User(AbstractUser):
     role = models.CharField(
-        max_length = 50,
-        choices=settings.USER_LEVEL_CHOICES, 
-        blank=True, 
-        default = 'user',
+        max_length=50,
+        choices=settings.USER_LEVEL_CHOICES,
+        blank=True,
+        default='user',
         verbose_name="Роль",
     )
     bio = models.TextField(
@@ -39,4 +38,3 @@ class User(AbstractUser):
         ordering = ('id',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-

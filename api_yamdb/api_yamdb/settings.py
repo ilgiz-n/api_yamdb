@@ -108,28 +108,28 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
-# Custom User model 
+# Custom User model
 
-AUTH_USER_MODEL = 'users.User' 
+AUTH_USER_MODEL = 'users.User'
 
 # Constant choises for User model
 
 USER_LEVEL_CHOICES = (
-        ('admin', 'admin'),
-        ('moderator', 'moderator'),
-        ('user', 'user'),
+    ('admin', 'admin'),
+    ('moderator', 'moderator'),
+    ('user', 'user'),
 )
 
 DEFAULT_USER_LEVEL = 'user'
 
-#  Email emulation 
+#  Email emulation
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 # REST FRAMEWORK settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',         
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -141,9 +141,9 @@ REST_FRAMEWORK = {
 # Token access settings
 
 SIMPLE_JWT = {
-   'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
-   'AUTH_HEADER_TYPES': ('Bearer',),
-} 
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Confirmation code
 CONFIRMATION_CODE_LENGTH = 5
