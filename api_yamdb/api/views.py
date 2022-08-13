@@ -36,7 +36,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
 
-    
+
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
     permission_classes = [AdminModeratorAuthorPermission]
