@@ -1,9 +1,40 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
-from reviews.models import Reviews, Comments, Titles
+from rest_framework import filters, viewsets
+from reviews.models import Reviews, Comments, Titles, Categories, Genres, Titles
+from django_filters.rest_framework import DjangoFilterBackend
 
-from .serializers import ReviewsSerializer, CommentsSerializer
-from .permissions import AdminModeratorAuthorPermission
+from .serializers import (CategoriesSerializer, GenresSerializer,
+                          ReviewsSerializer, CommentsSerializer,
+                          TitlesSerializer)
+from .permissions import (AdminModeratorAuthorPermission,
+                          AdminSuperuserPermission,
+                          IsAdminUserOrReadOnly)
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+
+
+class CategoriesViewSet(viewsets.ModelViewSet):
+    queryset = Categories.objects.all()
+    serializer_class = CategoriesSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class GenresViewSet(viewsets.ModelViewSet):
+    queryset = Genres.objects.all()
+    serializer_class = GenresSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
+
+
+class TitlesViewSet(viewsets.ModelViewSet):
+    queryset = Titles.objects.all()
+    serializer_class = TitlesSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (DjangoFilterBackend,)
 
 
 class ReviewsViewSet(viewsets.ModelViewSet):
