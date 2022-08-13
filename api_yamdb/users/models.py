@@ -6,7 +6,7 @@ from django.conf import settings
 
 class User(AbstractUser):
     role = models.CharField(
-        max_length = 20,
+        max_length = 50,
         choices=settings.USER_LEVEL_CHOICES, 
         blank=True, 
         default = settings.DEFAULT_USER_LEVEL,
@@ -29,17 +29,14 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == "admin" or self.is_superuser
+        return self.role == "admin"
 
     @property
     def is_moderator(self):
         return self.role == "moderator"
 
-    @property
-    def is_user(self):
-        return self.role == "user"
-
     class Meta:
+        ordering = ('id',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
