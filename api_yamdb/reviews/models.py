@@ -1,10 +1,6 @@
 from django.db import models
-# from django.contrib.auth import get_user_model
-# Create your models here.
-# User = get_user_model() - заменил на кастомную модель 
+
 from users.models import User
-
-
 
 
 class Categories(models.Model):
@@ -79,12 +75,11 @@ class Titles(models.Model):
 
     def __str__(self):
         return self.name
- 
 
 class Reviews(models.Model):
     title = models.ForeignKey(
         Titles,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='reviews'
     )
     author = models.ForeignKey(
@@ -102,7 +97,7 @@ class Reviews(models.Model):
 class Comments(models.Model):
     review = models.ForeignKey(
         Reviews,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='comments'
     )
     author = models.ForeignKey(
