@@ -1,3 +1,4 @@
+from tokenize import String
 from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -6,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 from users.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class SignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         max_length=255,
         validators=[UniqueValidator(queryset=User.objects.all())])
@@ -14,6 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
+            confirmation_code=validated_data['confirmation_code'],
         )
         return user
 
@@ -27,6 +29,20 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ( "username", "email", )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(max_length = 50)
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'bio',
+            'role',
+        )
 
 
 class TokenSerializer(serializers.ModelSerializer):

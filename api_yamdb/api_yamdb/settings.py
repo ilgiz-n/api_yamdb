@@ -125,7 +125,7 @@ USER_LEVEL_CHOICES = (
         ('admin', 'admin'),
         ('moderator', 'moderator'),
         ('user', 'user'),
-    )
+)
 
 DEFAULT_USER_LEVEL = 'user'
 
@@ -133,7 +133,7 @@ DEFAULT_USER_LEVEL = 'user'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
-# REST FRAMEWORK
+# REST FRAMEWORK settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
 #        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
@@ -142,6 +142,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
 
 
