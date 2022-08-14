@@ -9,8 +9,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
-from api.permissions import (AdminModeratorAuthorPermission,
-                             IsAdminOrReadOnly, IsSelfOrAdmins)
+from api.permissions import (AdminModeratorAuthorPermission, 
+                             IsAdminOrReadOnly, IsSelfOrAdmins,
+                             AdminModeratorAuthorPermissionNew)
 from api.serializers import (CategoriesSerializer, CommentsSerializer,
                              GenresSerializer, ReviewsSerializer,
                              TitlesSerializer, TitlesWriteSerializer)
@@ -23,9 +24,7 @@ from users.utils import generate_confirmation_code, send_mail_with_code
 
 
 class AuthCreateUserView(APIView):
-    permission_classes = (
-        permissions.AllowAny,
-    )
+    permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
         email = self.request.data.get('email')
@@ -119,18 +118,15 @@ class TitlesViewSet(viewsets.ModelViewSet):
 
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
-    permission_classes = (AdminModeratorAuthorPermission,)
+    permission_classes = (AdminModeratorAuthorPermissionNew,)
 
     def get_queryset(self):
-        title_id = self.kwargs.get('title_id')
-        new_queryset = Reviews.objects.filter(title=title_id)
-        return new_queryset
+        title = get_object_or_404(Titles, id=self.kwargs.get('title_id'))
+        return title.reviews.all()
 
     def perform_create(self, serializer):
-        title_id = self.kwargs.get('title_id')
-        titles = get_object_or_404(Titles, id=title_id)
-        serializer.save(author=self.request.user,
-                        titles=titles)
+        title = get_object_or_404(Titles, id=self.kwargs.get('title_id'))
+        serializer.save(author=self.request.user, title=title)
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
