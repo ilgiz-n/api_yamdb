@@ -9,16 +9,16 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
-from api.permissions import (AdminModeratorAuthorPermission,
-                             IsAdminOrReadOnly, IsSelfOrAdmins,)
+from api.filters import TitleFilter
+from api.permissions import (AdminModeratorAuthorPermission, IsAdminOrReadOnly,
+                             IsSelfOrAdmins)
 from api.serializers import (CategoriesSerializer, CommentsSerializer,
-                             GenresSerializer, ReviewsSerializer,
-                             TitlesSerializer, TitlesWriteSerializer)
+                             GenresSerializer, MeSerializer, ReviewsSerializer,
+                             SignUpSerializer, TitlesSerializer,
+                             TitlesWriteSerializer, TokenSerializer,
+                             UserSerializer)
 from reviews.models import Categories, Comments, Genres, Review, Title
 from users.models import User
-from api.filters import TitleFilter
-from api.serializers import (MeSerializer, SignUpSerializer, TokenSerializer,
-                             UserSerializer)
 from users.utils import generate_confirmation_code, send_mail_with_code
 
 
