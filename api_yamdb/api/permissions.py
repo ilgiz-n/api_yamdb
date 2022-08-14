@@ -1,6 +1,19 @@
 from rest_framework import permissions
 
 
+class AdminModeratorAuthorPermissionNew(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return (request.method in permissions.SAFE_METHODS
+                or request.user.is_authenticated)
+
+    def has_object_permission(self, request, view, obj):
+        return (request.method in permissions.SAFE_METHODS
+                or request.user.is_admin
+                or request.user.is_moderator
+                or obj.author == request.user)
+
+
 class AdminModeratorAuthorPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -35,13 +48,6 @@ class IsAdminOrReadOnly(permissions.BasePermission):
                 or request.user.is_superuser
             )
         )
-
-
-# class IsAdminUserOrReadOnly(IsAdminUser):
-#
-#     def has_permission(self, request, view):
-#         is_admin = super().has_permission(request, view)
-#         return request.method in SAFE_METHODS or is_admin
 
 
 class IsSelfOrAdmins(permissions.BasePermission):
