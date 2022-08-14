@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
-from api.permissions import (AdminModeratorAuthorPermission, 
+from api.permissions import (AdminModeratorAuthorPermission,
                              IsAdminOrReadOnly, IsSelfOrAdmins,
                              AdminModeratorAuthorPermissionNew)
 from api.serializers import (CategoriesSerializer, CommentsSerializer,
