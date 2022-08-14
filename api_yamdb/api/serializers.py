@@ -4,7 +4,7 @@ from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from reviews.models import Categories, Comments, Genres, Reviews, Titles
+from reviews.models import Categories, Comments, Genres, Review, Title
 from users.models import User
 
 
@@ -102,7 +102,7 @@ class TitlesWriteSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Titles
+        model = Title
         fields = '__all__'
 
     def validate_year(self, value):
@@ -118,12 +118,10 @@ class TitlesSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
 
     def get_rating(self, obj):
-        # reverse lookup on Reviews using item field
-        # return obj.reviews.all().annotate(rating=Avg('reviews__score'))
         return obj.reviews.all().aggregate(Avg('score'))['score__avg']
 
     class Meta:
-        model = Titles
+        model = Title
         fields = (
             'id',
             'name',
@@ -144,15 +142,21 @@ class ReviewsSerializer(serializers.ModelSerializer):
         slug_field='name',
         read_only=True,
     )
-    # score = serializers.SerializerMethodField()
 
-    # def get_score(self, obj):
-    #     return obj.objects.all().annotate(Avg('score'))
-    #     # return obj.title_id.aggregate(score=Avg('reviews__score'))
+    def validate(self, data):
+        if self.context['request'].method != 'POST':
+            return data
+        user = self.context['request'].user
+        title_id = self.context['view'].kwargs['title_id']
+        if Review.objects.filter(author=user, title_id=title_id).exists():
+            raise serializers.ValidationError(
+                'Вы уже оставляли отзыв!'
+            )
+        return data
 
     class Meta:
         fields = '__all__'
-        model = Reviews
+        model = Review
 
 
 class CommentsSerializer(serializers.ModelSerializer):
