@@ -47,7 +47,7 @@ class Titles(models.Model):
     category = models.ForeignKey(
         Categories,
         on_delete=models.SET_NULL,
-#       related_name='сategories',
+        related_name='сategories',
         blank=True, null=True,
         verbose_name='Категория',
         help_text='Выберите категорию произведения'
@@ -62,9 +62,9 @@ class Titles(models.Model):
     )
     genre = models.ManyToManyField(
         Genres,
-        blank=True,
-#       related_name='genres',
-        verbose_name='Жанр'
+        related_name='genres',
+        verbose_name='Жанр',
+        through='GenreTitle'
     )
 
     class Meta:
@@ -76,10 +76,19 @@ class Titles(models.Model):
         return self.name
 
 
+class GenreTitle(models.Model):
+    genre = models.ForeignKey(Genres, on_delete=models.CASCADE)
+    title = models.ForeignKey(Titles, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.title}, {self.genre}'
+
+
 class Reviews(models.Model):
     title = models.ForeignKey(
         Titles,
         on_delete=models.SET_NULL,
+        null=True,
         related_name='reviews'
     )
     author = models.ForeignKey(
@@ -110,6 +119,7 @@ class Comments(models.Model):
     review = models.ForeignKey(
         Reviews,
         on_delete=models.SET_NULL,
+        null=True,
         related_name='comments'
     )
     author = models.ForeignKey(
