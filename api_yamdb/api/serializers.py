@@ -73,29 +73,59 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Categories
-        fields = '__all__'
+        fields = ('name', 'slug',)
 
 
 class GenresSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Genres
-        fields = '__all__'
+        fields = ('name', 'slug',)
 
 
-class TitlesSerializer(serializers.ModelSerializer):
-    category = CategoriesSerializer(read_only=True)
-    genre = GenresSerializer(read_only=True, many=True)
+class TitlesWriteSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=200)
+    year = serializers.IntegerField()
+    genre = serializers.SlugRelatedField(
+        queryset=Genres.objects.all(),
+        slug_field='slug',
+        many=True,
+        required=True,
+    )
+    category = serializers.SlugRelatedField(
+        queryset=Categories.objects.all(),
+        slug_field='slug',
+        many=False,
+    )
 
     class Meta:
         model = Titles
-        fields = '__all__'
+        # fields = ('name', 'year', 'genre', 'category',)
+        fields = '_all_'
 
     def validate_year(self, value):
         current_year = dt.date.today().year
         if value > current_year:
             raise serializers.ValidationError('Исправьте год')
         return value
+
+
+class TitlesSerializer(serializers.ModelSerializer):
+    category = CategoriesSerializer()
+    genre = GenresSerializer(many=True)
+
+    class Meta:
+        model = Titles
+        fields = (
+            'id',
+            'name',
+            'year',
+            'rating',
+            'description',
+            'genre',
+            'category'
+        )
+        read_only_fields = fields
 
 
 class ReviewsSerializer(serializers.ModelSerializer):
