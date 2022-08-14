@@ -14,10 +14,9 @@ os.chdir(path)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        # User
+
         with open('users.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = User(
                     id=row['id'],
@@ -28,39 +27,30 @@ class Command(BaseCommand):
                     first_name=row['first_name'],
                     last_name=row['last_name']
                 )
-                data.append(obj)
-                User.objects.bulk_create(data)
+                obj.save()
 
-        # Category
         with open('category.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = Categories(
                     id=row['id'],
                     name=row['name'],
                     slug=row['slug']
                 )
-                data.append(obj)
-                Categories.objects.bulk_create(data)
+                obj.save()
 
-        # Genre
         with open('genre.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = Genres(
                     id=row['id'],
                     name=row['name'],
                     slug=row['slug']
                 )
-                data.append(obj)
-                Genres.objects.bulk_create(data)
+                obj.save()
 
-        # Title
         with open('titles.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = Title(
                     id=row['id'],
@@ -68,26 +58,20 @@ class Command(BaseCommand):
                     year=row['year'],
                     category=Categories.objects.get(id=row['category'])
                 )
-                data.append(obj)
-                Title.objects.bulk_create(data)
+                obj.save()
 
-        # GenreTitle
         with open('genre_title.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = GenreTitle(
                     id=row['id'],
                     title=Title.objects.get(id=row['title_id']),
                     genre=Genres.objects.get(id=row['genre_id'])
                 )
-                data.append(obj)
-                GenreTitle.objects.bulk_create(data)
+                obj.save()
 
-        # Review
         with open('review.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = Review(
                     id=row['id'],
@@ -97,13 +81,10 @@ class Command(BaseCommand):
                     score=row['score'],
                     pub_date=row['pub_date']
                 )
-                data.append(obj)
-                Review.objects.bulk_create(data)
+                obj.save()
 
-        # Comment
         with open('comments.csv') as csvfile:
             reader = csv.DictReader(csvfile)
-            data = []
             for row in reader:
                 obj = Comments(
                     id=row['id'],
@@ -112,8 +93,7 @@ class Command(BaseCommand):
                     author=User.objects.get(id=row['author']),
                     pub_date=row['pub_date']
                 )
-                data.append(obj)
-                Comments.objects.bulk_create(data)
+                obj.save()
 
         self.stdout.write(
             self.style.SUCCESS("Тестовыe данные загружены."))
