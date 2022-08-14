@@ -41,9 +41,7 @@ class AuthCreateUserView(APIView):
 
 
 class TokenCreateView(CreateAPIView):
-    permission_classes = (
-        permissions.AllowAny,
-    )
+    permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
         serializer = TokenSerializer(data=request.data)
@@ -121,7 +119,7 @@ class TitlesViewSet(viewsets.ModelViewSet):
 
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
-    permission_classes = [AdminModeratorAuthorPermissionNew]
+    permission_classes = (AdminModeratorAuthorPermission,)
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -137,7 +135,7 @@ class ReviewsViewSet(viewsets.ModelViewSet):
 
 class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
-    permission_classes = [AdminModeratorAuthorPermissionNew]
+    permission_classes = (AdminModeratorAuthorPermission,)
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
