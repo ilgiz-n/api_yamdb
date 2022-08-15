@@ -13,6 +13,9 @@ class UserAdmin(UserAdmin):
         'first_name',
         'last_name',
     )
+    fieldsets = (
+        (('User'), {'fields': list_display}),
+    )
     search_fields = ('username', 'role',)
     list_filter = ('username',)
     empty_value_display = '-пусто-'

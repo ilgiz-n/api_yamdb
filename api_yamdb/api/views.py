@@ -7,25 +7,24 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken
 
 from api.permissions import (AdminModeratorAuthorPermission,
-                             IsAdminUserOrReadOnly, IsSelfOrAdmins,
-                             IsAdminOrReadOnly)
+                             IsAdminOrReadOnly, IsSelfOrAdmins,
+                             AdminModeratorAuthorPermissionNew)
 from api.serializers import (CategoriesSerializer, CommentsSerializer,
                              GenresSerializer, ReviewsSerializer,
                              TitlesSerializer, TitlesWriteSerializer)
 from reviews.models import Categories, Comments, Genres, Reviews, Titles
 from users.models import User
+from api.filters import TitleFilter
 from api.serializers import (MeSerializer, SignUpSerializer, TokenSerializer,
                              UserSerializer)
 from users.utils import generate_confirmation_code, send_mail_with_code
 
 
 class AuthCreateUserView(APIView):
-    permission_classes = (
-        permissions.AllowAny,
-    )
+    permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
         email = self.request.data.get('email')
@@ -41,13 +40,7 @@ class AuthCreateUserView(APIView):
 
 
 class TokenCreateView(CreateAPIView):
-    permission_classes = (
-        permissions.AllowAny,
-    )
-
-    def get_token(self, user):
-        refresh = RefreshToken.for_user(user)
-        return str(refresh.access_token)
+    permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
         serializer = TokenSerializer(data=request.data)
@@ -56,7 +49,7 @@ class TokenCreateView(CreateAPIView):
         if user.confirmation_code != request.data.get('confirmation_code'):
             response = {'confirmation_code': 'Неверный код'}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        response = {'token': self.get_token(user)}
+        response = {'token': str(AccessToken.for_user(user))}
         return Response(response, status=status.HTTP_200_OK)
 
 
@@ -114,8 +107,8 @@ class TitlesViewSet(viewsets.ModelViewSet):
     serializer_class = TitlesSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
+    filterset_class = TitleFilter
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-#    filterset_class = filters.TitlesFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update',):
@@ -125,23 +118,20 @@ class TitlesViewSet(viewsets.ModelViewSet):
 
 class ReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewsSerializer
-    permission_classes = [AdminModeratorAuthorPermission]
+    permission_classes = (AdminModeratorAuthorPermissionNew,)
 
     def get_queryset(self):
-        title_id = self.kwargs.get('title_id')
-        new_queryset = Reviews.objects.filter(title=title_id)
-        return new_queryset
+        title = get_object_or_404(Titles, id=self.kwargs.get('title_id'))
+        return title.reviews.all()
 
     def perform_create(self, serializer):
-        title_id = self.kwargs.get('title_id')
-        titles = get_object_or_404(Titles, id=title_id)
-        serializer.save(author=self.request.user,
-                        titles=titles)
+        title = get_object_or_404(Titles, id=self.kwargs.get('title_id'))
+        serializer.save(author=self.request.user, title=title)
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
-    permission_classes = [AdminModeratorAuthorPermission]
+    permission_classes = (AdminModeratorAuthorPermission,)
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')

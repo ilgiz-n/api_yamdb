@@ -1,5 +1,6 @@
 import datetime as dt
 
+from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -74,6 +75,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
         fields = ('name', 'slug',)
+        lookup_field = 'slug'
 
 
 class GenresSerializer(serializers.ModelSerializer):
@@ -81,6 +83,7 @@ class GenresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genres
         fields = ('name', 'slug',)
+        lookup_field = 'slug'
 
 
 class TitlesWriteSerializer(serializers.ModelSerializer):
@@ -100,8 +103,7 @@ class TitlesWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Titles
-        # fields = ('name', 'year', 'genre', 'category',)
-        fields = '_all_'
+        fields = '__all__'
 
     def validate_year(self, value):
         current_year = dt.date.today().year
@@ -113,6 +115,12 @@ class TitlesWriteSerializer(serializers.ModelSerializer):
 class TitlesSerializer(serializers.ModelSerializer):
     category = CategoriesSerializer()
     genre = GenresSerializer(many=True)
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj):
+        # reverse lookup on Reviews using item field
+        # return obj.reviews.all().annotate(rating=Avg('reviews__score'))
+        return obj.reviews.all().aggregate(Avg('score'))['score__avg']
 
     class Meta:
         model = Titles
@@ -132,6 +140,26 @@ class ReviewsSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
+    title = serializers.SlugRelatedField(
+        slug_field='name',
+        read_only=True,
+    )
+    # score = serializers.SerializerMethodField()
+
+    # def get_score(self, obj):
+    #     return obj.objects.all().annotate(Avg('score'))
+    #     # return obj.title_id.aggregate(score=Avg('reviews__score'))
+
+    def validate(self, data):
+        if self.context['request'].method != 'POST':
+            return data
+        user = self.context['request'].user
+        title_id = self.context['view'].kwargs['title_id']
+        if Reviews.objects.filter(author=user, title_id=title_id).exists():
+            raise serializers.ValidationError(
+                'Вы уже оставляли отзыв!'
+            )
+        return data
 
     class Meta:
         fields = '__all__'
