@@ -1,12 +1,6 @@
 from django.shortcuts import get_object_or_404
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 from rest_framework import filters, viewsets
-from reviews.models import Reviews, Comments, Titles, Categories, Genres, Titles, Rating
->>>>>>> review
-=======
->>>>>>> a6c33433f4b79f199c6cdb9cf1dfeb5f9e425554
+from reviews.models import Review, Comments, Categories, Genres
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
