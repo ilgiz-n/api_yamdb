@@ -1,4 +1,4 @@
-# from django.db.models import Avg
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
@@ -84,25 +84,15 @@ class UsersViewSet(ModelViewSet):
 class CategoriesViewSet(CreateListDestroytViewSet):
     queryset = Categories.objects.all()
     serializer_class = CategoriesSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-    lookup_field = 'slug'
 
 
 class GenresViewSet(CreateListDestroytViewSet):
     queryset = Genres.objects.all()
     serializer_class = GenresSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = PageNumberPagination
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
-    lookup_field = 'slug'
 
 
 class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.aggregate(rating=Avg('reviews__score'))
     serializer_class = TitlesSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination

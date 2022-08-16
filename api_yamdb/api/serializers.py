@@ -1,6 +1,3 @@
-import datetime as dt
-
-from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -105,20 +102,14 @@ class TitlesWriteSerializer(serializers.ModelSerializer):
         model = Title
         fields = '__all__'
 
-#    def validate_year(self, value):
-#        current_year = dt.date.today().year
-#        if value > current_year:
-#            raise serializers.ValidationError('Исправьте год')
-#        return value
-
 
 class TitlesSerializer(serializers.ModelSerializer):
     category = CategoriesSerializer()
     genre = GenresSerializer(many=True)
     rating = serializers.SerializerMethodField()
 
-    def get_rating(self, obj):
-        return obj.reviews.all().aggregate(Avg('score'))['score__avg']
+#    def get_rating(self, obj):
+#        return obj.reviews.all().aggregate(Avg('score'))['score__avg']
 
     class Meta:
         model = Title
