@@ -17,7 +17,7 @@ from api.serializers import (CategoriesSerializer, CommentsSerializer,
                              SignUpSerializer, TitlesSerializer,
                              TitlesWriteSerializer, TokenSerializer,
                              UserSerializer)
-from reviews.models import Categories, Comments, Genres, Review, Title
+from reviews.models import Categories, Genres, Review, Title
 from users.models import User
 from users.utils import generate_confirmation_code, send_mail_with_code
 
@@ -132,9 +132,8 @@ class CommentsViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        review_id = self.kwargs.get('review_id')
-        new_queryset = Comments.objects.filter(review=review_id)
-        return new_queryset
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
+        return review.comments.all()
 
     def perform_create(self, serializer):
         review_id = self.kwargs.get('review_id')
