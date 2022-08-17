@@ -112,16 +112,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
 AUTH_USER_MODEL = 'users.User'
 
-# Constant choises for User model
-
-USER_LEVEL_CHOICES = (
-    ('admin', 'admin'),
-    ('moderator', 'moderator'),
-    ('user', 'user'),
-)
-
-DEFAULT_USER_LEVEL = 'user'
-
 #  Email emulation
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
@@ -144,6 +134,3 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-
-# Confirmation code
-CONFIRMATION_CODE_LENGTH = 5
