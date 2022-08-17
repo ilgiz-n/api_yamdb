@@ -1,30 +1,33 @@
 import datetime as dt
+import re
 
 from django.db.models import Avg
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from reviews.models import Categories, Comments, Genres, Review, Title
 from users.models import User
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        max_length=255,
-        validators=[UniqueValidator(queryset=User.objects.all())])
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            confirmation_code=validated_data['confirmation_code'],
-        )
-        return user
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Данный email уже используется')
+        return value
 
     def validate_username(self, value):
         if value.lower() == 'me':
             raise serializers.ValidationError(
-                'username "me" not allowed'
+                'Имя "me" не допустимо'
+            )
+        reg = re.compile(r'^[\w.@+-]+$')
+        if not reg.match(value):
+            raise serializers.ValidationError(
+                'Для имени допустимы буквы, цифры and и знаки @.+-_'
+            )
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(
+                'Данное имя уже используется'
             )
         return value
 
