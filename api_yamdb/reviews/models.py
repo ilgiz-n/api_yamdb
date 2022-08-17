@@ -56,10 +56,6 @@ class Title(models.Model):
         verbose_name='Категория',
         help_text='Выберите категорию произведения'
     )
-    rating = models.IntegerField(
-        verbose_name='Рейтинг',
-        blank=True, null=True,
-    )
     description = models.TextField(
         verbose_name='Описание',
         blank=True, null=True,

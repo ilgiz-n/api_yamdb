@@ -92,7 +92,7 @@ class GenresViewSet(CreateListDestroytViewSet):
 
 
 class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.aggregate(rating=Avg('reviews__score'))
+    queryset = Title.objects.all()
     serializer_class = TitlesSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -103,6 +103,10 @@ class TitlesViewSet(viewsets.ModelViewSet):
         if self.action in ('create', 'update', 'partial_update',):
             return TitlesWriteSerializer
         return TitlesSerializer
+
+    def get_queryset(self):
+        return Title.objects.annotate(
+            rating=Avg('reviews__score')).order_by('name')
 
 
 class ReviewsViewSet(viewsets.ModelViewSet):

@@ -24,14 +24,12 @@ class TitlesAdmin(admin.ModelAdmin):
         'pk',
         'name',
         'year',
-        'rating',
         'description',
         'category',
     )
     list_editable = (
         'description',
         'category',
-        'rating',
     )
     search_fields = ('name', 'year', 'rating')
     list_filter = ('name',)
