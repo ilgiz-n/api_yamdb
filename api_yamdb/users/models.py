@@ -1,14 +1,23 @@
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+USER_LEVEL_CHOICES = (
+    ('admin', 'admin'),
+    ('moderator', 'moderator'),
+    ('user', 'user'),
+)
+
+DEFAULT_USER_LEVEL = 'user'
+
+CONFIRMATION_CODE_LENGTH = 5
 
 
 class User(AbstractUser):
     role = models.CharField(
         max_length=50,
-        choices=settings.USER_LEVEL_CHOICES,
+        choices=USER_LEVEL_CHOICES,
         blank=True,
-        default='user',
+        default=DEFAULT_USER_LEVEL,
         verbose_name="Роль",
     )
     bio = models.TextField(
@@ -16,7 +25,7 @@ class User(AbstractUser):
         verbose_name="Биография",
     )
     confirmation_code = models.CharField(
-        max_length=settings.CONFIRMATION_CODE_LENGTH,
+        max_length=CONFIRMATION_CODE_LENGTH,
         blank=True,
         verbose_name="Код верификации",
     )

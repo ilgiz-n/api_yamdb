@@ -13,13 +13,13 @@ from rest_framework_simplejwt.tokens import AccessToken
 from api.filters import TitleFilter
 from api.mixins import CreateListDestroytViewSet
 from api.permissions import (AdminModeratorAuthorPermission, IsAdminOrReadOnly,
-                             IsSelfOrAdmins)
+                             IsAdmins)
 from api.serializers import (CategoriesSerializer, CommentsSerializer,
                              GenresSerializer, MeSerializer, ReviewsSerializer,
                              SignUpSerializer, TitlesSerializer,
                              TitlesWriteSerializer, TokenSerializer,
                              UserSerializer)
-from reviews.models import Categories, Comments, Genres, Review, Title
+from reviews.models import Categories, Genres, Review, Title
 from users.models import User
 from users.utils import generate_confirmation_code, send_mail_with_code
 
@@ -32,10 +32,7 @@ class AuthCreateUserView(APIView):
         confirmation_code = generate_confirmation_code()
         serializer = SignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(
-            data=self.request.data,
-            confirmation_code=confirmation_code
-        )
+        serializer.save(confirmation_code=confirmation_code)
         send_mail_with_code(email, confirmation_code)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -57,7 +54,7 @@ class TokenCreateView(CreateAPIView):
 class UsersViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsSelfOrAdmins,)
+    permission_classes = (IsAdmins,)
     pagination_class = PageNumberPagination
     filter_backends = (filters.SearchFilter, )
     search_fields = ('username', )
@@ -69,7 +66,7 @@ class UsersViewSet(ModelViewSet):
         methods=['get', 'patch'],
         url_path='me'
     )
-    def get_or_update(self, request):
+    def account_info(self, request):
         user = get_object_or_404(User, username=self.request.user)
         if request.method == 'GET':
             serializer = MeSerializer(user)
@@ -129,9 +126,8 @@ class CommentsViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        review_id = self.kwargs.get('review_id')
-        new_queryset = Comments.objects.filter(review=review_id)
-        return new_queryset
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
+        return review.comments.all()
 
     def perform_create(self, serializer):
         review_id = self.kwargs.get('review_id')
