@@ -98,13 +98,17 @@ class Review(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
-        related_name='reviews'
+        related_name='reviews',
+        verbose_name='Произведение'
     )
-    text = models.TextField()
+    text = models.TextField(
+        verbose_name='Отзыв'
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='reviews'
+        related_name='reviews',
+        verbose_name='Автор'
     )
     score = models.PositiveSmallIntegerField(
         validators=[
@@ -129,12 +133,14 @@ class Comments(models.Model):
         Review,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='comments'
+        related_name='comments',
+        verbose_name='Отзыв'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='comments',
+        verbose_name='Автор'
     )
     text = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)

@@ -66,7 +66,7 @@ class UsersViewSet(ModelViewSet):
         methods=['get', 'patch'],
         url_path='me'
     )
-    def account_info(self, request):
+    def me(self, request):
         user = get_object_or_404(User, username=self.request.user)
         if request.method == 'GET':
             serializer = MeSerializer(user)
@@ -89,7 +89,8 @@ class GenresViewSet(CreateListDestroytViewSet):
 
 
 class TitlesViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().annotate(
+        rating=Avg('reviews__score')).order_by('name')
     serializer_class = TitlesSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = PageNumberPagination
@@ -100,10 +101,6 @@ class TitlesViewSet(viewsets.ModelViewSet):
         if self.action in ('create', 'update', 'partial_update',):
             return TitlesWriteSerializer
         return TitlesSerializer
-
-    def get_queryset(self):
-        return Title.objects.annotate(
-            rating=Avg('reviews__score')).order_by('name')
 
 
 class ReviewsViewSet(viewsets.ModelViewSet):
