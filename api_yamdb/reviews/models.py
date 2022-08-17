@@ -2,14 +2,15 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from users.models import User
+from .validators import validate_year
 
 
 class Categories(models.Model):
     name = models.CharField(
-        'Name', blank=True, max_length=50
+        verbose_name='Название категории', blank=True, max_length=50
     )
     slug = models.SlugField(
-        'Slug', unique=True
+        verbose_name='Идентификатор категории', unique=True
     )
 
     class Meta:
@@ -23,10 +24,10 @@ class Categories(models.Model):
 
 class Genres(models.Model):
     name = models.CharField(
-        'Name', max_length=50
+        verbose_name='Название жанра', max_length=50
     )
     slug = models.SlugField(
-        'Slug', unique=True
+        verbose_name='Идентификатор жанра', unique=True
     )
 
     class Meta:
@@ -44,6 +45,7 @@ class Title(models.Model):
     )
     year = models.IntegerField(
         verbose_name='Год выпуска',
+        validators=[validate_year],
         blank=True, null=True
     )
     category = models.ForeignKey(
@@ -79,11 +81,21 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    genre = models.ForeignKey(Genres, on_delete=models.CASCADE)
-    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    genre = models.ForeignKey(
+        Genres,
+        on_delete=models.CASCADE,
+        verbose_name='Жанр')
+    title_id = models.ForeignKey(
+        Title,
+        on_delete=models.CASCADE,
+        verbose_name='Произведение')
 
-    def __str__(self) -> str:
-        return f'{self.title}, {self.genre}'
+    class Meta:
+        verbose_name = 'Произведение и жанр'
+        verbose_name_plural = 'Произведения и жанры'
+
+    def __str__(self):
+        return f'{self.title_id}'
 
 
 class Review(models.Model):
