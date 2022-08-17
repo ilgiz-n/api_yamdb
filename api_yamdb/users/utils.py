@@ -1,8 +1,9 @@
 import random
 import string
 
-from django.conf import settings
 from django.core.mail import send_mail
+
+from users.models import CONFIRMATION_CODE_LENGTH
 
 
 def send_mail_with_code(email, confirmation_code):
@@ -19,6 +20,6 @@ def generate_confirmation_code():
     return ''.join(
         random.choices(
             string.digits,
-            k=settings.CONFIRMATION_CODE_LENGTH
+            k=CONFIRMATION_CODE_LENGTH
         )
     )
