@@ -103,6 +103,12 @@ http://127.0.0.1:8000/api/v1/token/
 http://127.0.0.1:8000/redoc/
 ```
 
+### Cистемные требования 
+ - Python 3.7.3
+ - Django 2.2.16
+ - Django REST framework 3.12.4
+ - requests, djangorestframework-simplejwt, django-filter, PyJWT, pytest, pytest-django, pytest-pythonpath, psycopg2-binary
+
 ### Разработка проекта: 
 
 [Ильгиз Нигматуллин](https://github.com/ilgiz-n) - вся часть, касающуюся управления пользователями (Auth и Users): система регистрации и аутентификации, права доступа, работа с токеном, система подтверждения через e-mail.
